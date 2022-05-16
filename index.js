@@ -12,6 +12,11 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+app.get( '/talker', ( req, res ) => {
+  const object = 
+  res.staus(200).json(object)
+})
+
 app.listen(PORT, () => {
   console.log('Online');
 });
