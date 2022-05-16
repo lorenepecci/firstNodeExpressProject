@@ -1,4 +1,4 @@
-const validMiddleware = (req, res, next) => {
+const validation = (req, res, next) => {
   const { email, password } = req.body;
   const validEmail = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/i;
 
@@ -14,4 +14,4 @@ const validMiddleware = (req, res, next) => {
   next();
 };
 
-module.exports = validMiddleware;
+module.exports = { validation };
