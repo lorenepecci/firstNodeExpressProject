@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 /* const data = require('./talker.json'); */
 const { readFileFunc } = require('./helpers/fs');
+const { generateToken } = require('./helpers/generateToken');
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,10 +32,10 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(200).json(findID);
 });
 
-/* app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  res.status(200).json({token: })
-}); */
+app.post('/login', (_req, res) => {
+  /* const { email, password } = req.body; */
+  res.status(200).json({ token: generateToken() });
+}); 
  
 app.listen(PORT, () => {
   console.log('Online');
