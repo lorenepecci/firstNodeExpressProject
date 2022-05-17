@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-/* const data = require('./talker.json'); */
 const { readFileFunc, writeFileFunc } = require('./helpers/fs');
 const { generateToken } = require('./helpers/generateToken');
 const { validation } = require('./middlewares/validation');
@@ -12,6 +11,7 @@ app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
+const file = 'talker.json';
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -19,13 +19,13 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker', async (_req, res) => {
-  const object = await readFileFunc('talker.json');
+  const object = await readFileFunc(file);
   res.status(200).json(object);
 });
 
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
-  const data = await readFileFunc('talker.json');
+  const data = await readFileFunc(file);
   const findID = data.find((obj) => obj.id === Number(id));
   if (!findID) {
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
@@ -35,19 +35,19 @@ app.get('/talker/:id', async (req, res) => {
 
 app.post('/talker', autenticated, validIfExists, validatePost,
   validateTalk, async (req, res) => {
-  const objNew = await writeFileFunc('talker.json', req.body, null);
+  const objNew = await writeFileFunc(file, req.body, null);
   return res.status(201).json(objNew); 
 });
 
 app.put('/talker/:id', autenticated, validIfExists, validatePost, validateTalk,
   async (req, res) => {
   const { id } = req.params;
-  const data = await readFileFunc('talker.json');
+  const data = await readFileFunc(file);
   const findID = data.find((obj) => obj.id === Number(id));
   if (!findID) {
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   }
-  const objNew = await writeFileFunc('talker.json', req.body, id);
+  const objNew = await writeFileFunc(file, req.body, id);
   return res.status(200).json(objNew); 
 });
 
