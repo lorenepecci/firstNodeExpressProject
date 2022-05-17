@@ -1,9 +1,14 @@
 const validIfExists = (req, res, next) => {
   const obj = ['name', 'age', 'talk'];
   const objKeys = Object.keys(req.body);
-  for (let i = 0; i < objKeys.length; i += 1) {
+  for (let i = 0; i < obj.length; i += 1) {
     const key = objKeys[i];
     if (`${key}` !== obj[i]) {
+      if (obj[i] === 'talk') {
+        return res.status(400).json({
+          message: `O campo "${obj[i]}" é obrigatório e "watchedAt" e "rate" não podem ser vazios`,
+        });
+      }
       return res.status(400).json({ message: `O campo "${obj[i]}" é obrigatório` });
     } 
   } 

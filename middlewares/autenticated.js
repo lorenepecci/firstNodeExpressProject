@@ -4,7 +4,7 @@ const autenticated = (req, res, next) => {
     return res.status(401).json({
       message: 'Token não encontrado',
     });
-  } if (authorization.length < 6) {
+  } if (authorization.length < 16 || typeof authorization === 'number') {
     return res.status(401).json({
       message: 'Token inválido',
     });
