@@ -9,6 +9,10 @@ const readFileFunc = async (arq) => {
   }
 };
 
+const writeFromDelete = async (file, array) => {
+  await fs.writeFile(file, JSON.stringify(array), 'utf-8');
+};
+
 const writeFileFunc = async (arq, newObj, idparam) => {
   const read = await readFileFunc(arq);
   const { name, age, talk: { watchedAt, rate } } = newObj;
@@ -30,4 +34,4 @@ const writeFileFunc = async (arq, newObj, idparam) => {
     return obj;
 };
 
-module.exports = { readFileFunc, writeFileFunc };
+module.exports = { readFileFunc, writeFileFunc, writeFromDelete };

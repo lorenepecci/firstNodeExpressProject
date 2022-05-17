@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readFileFunc, writeFileFunc } = require('./helpers/fs');
+const { readFileFunc, writeFileFunc, writeFromDelete } = require('./helpers/fs');
 const { generateToken } = require('./helpers/generateToken');
 const { validation } = require('./middlewares/validation');
 const { autenticated } = require('./middlewares/autenticated');
@@ -43,14 +43,22 @@ app.put('/talker/:id', autenticated, validIfExists, validatePost, validateTalk,
   async (req, res) => {
   const { id } = req.params;
   const data = await readFileFunc(file);
-  const findID = data.find((obj) => obj.id === Number(id));
-  if (!findID) {
+  const findObj = data.find((obj) => obj.id === Number(id));
+  if (!findObj) {
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   }
   const objNew = await writeFileFunc(file, req.body, id);
   return res.status(200).json(objNew); 
-});
+  });
 
+app.delete('/talker/:id', autenticated, async (req, res) => {
+  const { id } = req.params;
+  const data = await readFileFunc(file);
+  const filterData = data.filter((obj) => obj.id !== Number(id));
+  await writeFromDelete(file, filterData);
+  res.status(204).end();
+});
+    
 app.post('/login', validation, (_req, res) => {
   const token = generateToken();
   res.status(200).json({ token });
