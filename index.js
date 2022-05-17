@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 /* const data = require('./talker.json'); */
-const { readFileFunc } = require('./helpers/fs');
+const { readFileFunc, writeFileFunc } = require('./helpers/fs');
 const { generateToken } = require('./helpers/generateToken');
 const { validation } = require('./middlewares/validation');
+const { autenticated } = require('./middlewares/autenticated');
+const { validatePost, validIfExists, validateTalk } = require('./middlewares/validatePost');
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,9 +33,15 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(200).json(findID);
 });
 
+app.post('/talker', autenticated, validIfExists, validatePost,
+  validateTalk, async (req, res) => {
+  /* const { age, name, talk: { watchedAt, rate } } = req.body; */
+  const objNew = await writeFileFunc('talker.json', req.body);
+  return res.status(201).json(objNew); 
+});
+
 app.post('/login', validation, (_req, res) => {
   const token = generateToken();
-  console.log(token);
   res.status(200).json({ token });
 }); 
  

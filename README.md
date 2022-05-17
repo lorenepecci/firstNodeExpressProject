@@ -485,6 +485,8 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
     {
       "message": "O campo \"watchedAt\" deve ter o formato \"dd/mm/aaaa\""
     }
+
+    
     ```
 
   - A chave `rate` deve ser um inteiro de 1 à 5.
