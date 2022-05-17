@@ -23,7 +23,7 @@ const validatePost = (req, res, next) => {
   if (age < 18) {
     return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
   }
-  if (!watchedAt || !rate) {
+  if (!watchedAt || rate === undefined) {
     return res.status(400).json(
       { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
     );

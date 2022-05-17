@@ -35,9 +35,20 @@ app.get('/talker/:id', async (req, res) => {
 
 app.post('/talker', autenticated, validIfExists, validatePost,
   validateTalk, async (req, res) => {
-  /* const { age, name, talk: { watchedAt, rate } } = req.body; */
-  const objNew = await writeFileFunc('talker.json', req.body);
+  const objNew = await writeFileFunc('talker.json', req.body, null);
   return res.status(201).json(objNew); 
+});
+
+app.put('/talker/:id', autenticated, validIfExists, validatePost, validateTalk,
+  async (req, res) => {
+  const { id } = req.params;
+  const data = await readFileFunc('talker.json');
+  const findID = data.find((obj) => obj.id === Number(id));
+  if (!findID) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  const objNew = await writeFileFunc('talker.json', req.body, id);
+  return res.status(200).json(objNew); 
 });
 
 app.post('/login', validation, (_req, res) => {
