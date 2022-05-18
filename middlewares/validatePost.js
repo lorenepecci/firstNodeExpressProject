@@ -15,7 +15,7 @@ const validIfExists = (req, res, next) => {
   next();
 };
 
-const validatePost = (req, res, next) => {
+const validateParameters = (req, res, next) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
   if (name.length < 3) {
     return res.status(400).json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
@@ -47,4 +47,4 @@ const validateTalk = (req, res, next) => {
   next();
 };
 
-module.exports = { validatePost, validIfExists, validateTalk };
+module.exports = { validateParameters, validIfExists, validateTalk };

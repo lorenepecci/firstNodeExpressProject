@@ -9,11 +9,16 @@ const readFileFunc = async (arq) => {
   }
 };
 
-const writeFromDelete = async (file, array) => {
-  await fs.writeFile(file, JSON.stringify(array), 'utf-8');
+const writeFileFunc = async (arq, json) => {
+  try {
+    const write = await fs.writeFile(arq, JSON.stringify(json), 'utf-8');
+    return write;
+  } catch (err) {
+    return err;
+  }
 };
 
-const writeFileFunc = async (arq, newObj, idparam) => {
+const putOrPostWriteFile = async (arq, newObj, idparam) => {
   const read = await readFileFunc(arq);
   const { name, age, talk: { watchedAt, rate } } = newObj;
   let id;
@@ -24,14 +29,13 @@ const writeFileFunc = async (arq, newObj, idparam) => {
       obj = { name, age, id, talk: { watchedAt, rate } };
       newArray = [...read, obj];
     } else {
-      id = Number(idparam);
+      id = idparam;
       obj = { ...read[id], name, age, id, talk: { watchedAt, rate } }; 
       newArray = read;
       newArray[id - 1] = obj;
     }
-    console.log(newArray); 
-    await fs.writeFile(arq, JSON.stringify(newArray), 'utf-8');
+    await writeFileFunc(arq, newArray);
     return obj;
 };
 
-module.exports = { readFileFunc, writeFileFunc, writeFromDelete };
+module.exports = { readFileFunc, writeFileFunc, putOrPostWriteFile };

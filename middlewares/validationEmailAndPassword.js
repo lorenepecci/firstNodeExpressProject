@@ -1,4 +1,4 @@
-const validation = (req, res, next) => {
+const validationEmailAndPassword = (req, res, next) => {
   const { email, password } = req.body;
   const validEmail = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/i;
 
@@ -14,4 +14,4 @@ const validation = (req, res, next) => {
   next();
 };
 
-module.exports = { validation };
+module.exports = { validationEmailAndPassword };
