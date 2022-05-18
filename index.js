@@ -18,19 +18,37 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+app.post('/login', validation, (_req, res) => {
+  const token = generateToken();
+  res.status(200).json({ token });
+}); 
+
 app.get('/talker', async (_req, res) => {
   const object = await readFileFunc(file);
   res.status(200).json(object);
 });
 
+app.get('/talker/search', autenticated, async (req, res) => {
+  const { q } = req.query;
+  const data = await readFileFunc(file);
+  if (!q) {
+    return res.status(200).json(data);
+  }
+  const filterData = data.filter((obj) => obj.name.includes(q));
+  if (filterData.length) {
+    return res.status(200).json(filterData);
+  }
+  return res.status(200).json([]);
+});
+
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   const data = await readFileFunc(file);
-  const findID = data.find((obj) => obj.id === Number(id));
-  if (!findID) {
+  const findObj = data.find((obj) => obj.id === Number(id));
+  if (!findObj) {
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   }
-  return res.status(200).json(findID);
+  return res.status(200).json(findObj);
 });
 
 app.post('/talker', autenticated, validIfExists, validatePost,
@@ -58,12 +76,7 @@ app.delete('/talker/:id', autenticated, async (req, res) => {
   await writeFromDelete(file, filterData);
   res.status(204).end();
 });
-    
-app.post('/login', validation, (_req, res) => {
-  const token = generateToken();
-  res.status(200).json({ token });
-}); 
- 
+
 app.listen(PORT, () => {
   console.log('Online');
 });
